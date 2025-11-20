@@ -2,21 +2,20 @@ using UnityEngine;
 
 public class AttackComponent : IAttackComponent
 {
-    private CharacterData characterData;
+    private CharacterData data;
+    public float Damage => 10f;
+    public float AttackRange => 3f;
 
-    public float Damage => 10;
-
-    public float AttackRange => 3.0f;
-
-    public void Initialize(CharacterData characterData)
+    public void Initialize(Character character)
     {
-      this.characterData = characterData;
+        data = character.CharacterData;
     }
 
     public void MakeDamage(Character attackTarget)
     {
-        if (Vector3.Distance(characterData.CharacterTransform.position, attackTarget.transform.position) <= AttackRange) 
+        if (UnityEngine.Vector3.Distance(data.CharacterTransform.position, attackTarget.transform.position) <= AttackRange)
+        {
             attackTarget.HealthComponent.SetDamage((int)Damage);
-
+        }
     }
 }

@@ -8,15 +8,15 @@ public class HealthComponent : IHealthComponent
     private float maxHealth = 100;
 
 
-    public float Health 
-    { 
-        get 
-        { 
+    public float Health
+    {
+        get
+        {
             return health;
         }
         private set
         {
-            health = Mathf.Clamp(value, min:0, MaxHealth);
+            health = Mathf.Clamp(value, min: 0, MaxHealth);
             if (health == 0)
                 SetDeath();
         }
@@ -28,7 +28,7 @@ public class HealthComponent : IHealthComponent
         Health -= damage;
     }
 
-    private void SetDeath() 
+    private void SetDeath()
     {
 
     }
