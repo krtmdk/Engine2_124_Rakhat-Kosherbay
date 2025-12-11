@@ -2,21 +2,23 @@ using UnityEngine;
 
 public class PlayerCharacter : Character
 {
-    private IInputReader inputReader;
+    [SerializeField] private PlayerInputReader inputReader;
 
-    public override void Initialize()
+    public override void Start()
     {
-        base.Initialize();
-        HealthComponent = new ImmortalHealthComponent();
-        inputReader = new PlayerInputReader();
+        base.Start();
+        LiveComponent = new PlayerLiveComponent();
     }
 
-    protected override void Update()
+    public override void Update()
     {
-        if (HealthComponent.Health <= 0) return;
+        if (LiveComponent == null || !LiveComponent.IsAlive) return;
 
-        UnityEngine.Vector3 moveDirection = inputReader.ReadInput();
-        MovementComponent.Move(moveDirection);
-        MovementComponent.Rotation(moveDirection);
+        Vector3 movementVector = Vector3.zero;
+        if (inputReader != null)
+            movementVector = inputReader.GetMovementDirection();
+
+        MovableComponent.Move(movementVector);
+        MovableComponent.Rotation(movementVector);
     }
 }

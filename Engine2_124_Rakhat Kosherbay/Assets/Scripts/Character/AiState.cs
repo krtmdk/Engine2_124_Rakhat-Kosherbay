@@ -1,6 +1,6 @@
-public enum AiState
+public enum AiState 
 {
-    Idle = 0,
+    None = 0,
     MoveToTarget = 1,
     Attack = 2
 }

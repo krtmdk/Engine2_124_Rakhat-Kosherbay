@@ -2,45 +2,60 @@ using UnityEngine;
 
 public class EnemyCharacter : Character
 {
-    [SerializeField] private Character characterTarget;
-    [SerializeField] private AiState aiState;
+    [SerializeField] private Character targetCharacter;
+    [SerializeField] private AiState aiState = AiState.MoveToTarget;
 
-    public override void Initialize()
+    public override void Start()
     {
-        base.Initialize();
-        HealthComponent = new HealthComponent();
+        base.Start();
+
+        LiveComponent = new EnemyLiveComponent();
+        AttackComponent = new CharacterAttackComponent();
+
+        AttackComponent.Initialize(this);
     }
 
-    protected override void Update()
+    public override void Update()
     {
-        if (HealthComponent.Health <= 0) return;
+        if (LiveComponent == null || !LiveComponent.IsAlive) return;
+        if (targetCharacter == null) return;
 
-        float distance = UnityEngine.Vector3.Distance(transform.position, characterTarget.transform.position);
+        float distance = Vector3.Distance(targetCharacter.transform.position, CharacterData.CharacterTransform.position);
 
         switch (aiState)
         {
-            case AiState.Idle:
+            case AiState.None:
                 return;
 
             case AiState.MoveToTarget:
-                if (distance <= AttackComponent.AttackRange)
-                {
+                Move();
+
+                if (distance <= 3f)
                     aiState = AiState.Attack;
-                    return;
-                }
-                UnityEngine.Vector3 moveDirection = (characterTarget.transform.position - transform.position).normalized;
-                MovementComponent.Move(moveDirection);
-                MovementComponent.Rotation(moveDirection);
+
                 return;
 
             case AiState.Attack:
-                if (distance > AttackComponent.AttackRange)
+                if (distance > 3f)
                 {
                     aiState = AiState.MoveToTarget;
                     return;
                 }
-                AttackComponent.MakeDamage(characterTarget);
+
+                AttackComponent.MakeDamage(targetCharacter);
                 return;
         }
+    }
+
+    private void Move()
+    {
+        if (targetCharacter == null) return;
+
+        Vector3 direction = targetCharacter.transform.position - CharacterData.CharacterTransform.position;
+        direction.y = 0;
+        direction = direction.normalized;
+
+        MovableComponent.Move(direction);
+        MovableComponent.Rotation(direction);
     }
 }

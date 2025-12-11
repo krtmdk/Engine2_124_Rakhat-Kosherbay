@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface IInputReader
 {
-    UnityEngine.Vector3 ReadInput();
+    Vector3 GetMovementDirection();
 }

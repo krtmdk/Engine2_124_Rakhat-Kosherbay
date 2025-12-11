@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class CharacterData : MonoBehaviour
 {
-    [SerializeField] private CharacterController characterController;
+    [SerializeField] private float speed;
     [SerializeField] private Transform characterTransform;
-    [SerializeField] private float defaultSpeed;
+    [SerializeField] private CharacterController characterController;
 
-    public CharacterController CharacterController => characterController;
+    public float DefaultSpeed => speed;
     public Transform CharacterTransform => characterTransform;
-    public float DefaultSpeed => defaultSpeed;
+    public CharacterController CharacterController { get { return characterController; } }
 }
