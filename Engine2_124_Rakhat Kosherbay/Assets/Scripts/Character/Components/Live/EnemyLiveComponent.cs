@@ -1,12 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyLiveComponent : ILiveComponent
 {
-
     private float health;
+    private Character selfCharacter;
 
     public bool IsAlive => Health > 0;
 
@@ -22,15 +20,21 @@ public class EnemyLiveComponent : ILiveComponent
             {
                 health = 0;
                 OnDeath?.Invoke();
+                OnCharacterDeath?.Invoke(selfCharacter);
             }
         }
-
     }
 
     public event Action OnDeath;
+    public event Action<Character> OnCharacterDeath;
 
     public void GetDamage(float damage)
     {
-        Health -= damage * 1000;
+        Health -= damage;
+    }
+
+    public void Initialize(Character selfCharacter)
+    {
+        this.selfCharacter = selfCharacter;
     }
 }

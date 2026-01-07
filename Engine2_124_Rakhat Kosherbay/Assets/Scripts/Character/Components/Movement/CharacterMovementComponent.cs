@@ -17,7 +17,7 @@ public class CharacterMovementComponent : IMovable
 
     public void Initialize(Character character)
     {
-        this.characterData = character.CharacterData;
+        characterData = character.CharacterData;
         speed = characterData.DefaultSpeed;
     }
 

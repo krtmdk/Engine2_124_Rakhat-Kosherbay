@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ILiveComponent 
+public interface ILiveComponent : ICharacterComponent
 {
+    public event Action<Character> OnCharacterDeath;
+
     public event Action OnDeath;
 
 

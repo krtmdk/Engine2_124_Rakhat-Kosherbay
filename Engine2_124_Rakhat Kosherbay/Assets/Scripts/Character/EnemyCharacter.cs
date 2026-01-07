@@ -2,25 +2,29 @@ using UnityEngine;
 
 public class EnemyCharacter : Character
 {
-    [SerializeField] private Character targetCharacter;
+   
     [SerializeField] private AiState aiState = AiState.MoveToTarget;
 
-    public override void Start()
+    public override Character CharacterTarget => 
+        GameManager.Instance.CharacterFactory.Player;
+
+    public override void Initialize()
     {
-        base.Start();
+        base.Initialize();
 
         LiveComponent = new EnemyLiveComponent();
-        AttackComponent = new CharacterAttackComponent();
+        LiveComponent.Initialize(this);
 
+        AttackComponent = new CharacterAttackComponent();
         AttackComponent.Initialize(this);
     }
 
     public override void Update()
     {
         if (LiveComponent == null || !LiveComponent.IsAlive) return;
-        if (targetCharacter == null) return;
+        if (CharacterTarget == null) return;
 
-        float distance = Vector3.Distance(targetCharacter.transform.position, CharacterData.CharacterTransform.position);
+        float distance = Vector3.Distance(CharacterTarget.transform.position, CharacterData.CharacterTransform.position);
 
         switch (aiState)
         {
@@ -42,16 +46,16 @@ public class EnemyCharacter : Character
                     return;
                 }
 
-                AttackComponent.MakeDamage(targetCharacter);
+                AttackComponent.MakeDamage(CharacterTarget);
                 return;
         }
     }
 
     private void Move()
     {
-        if (targetCharacter == null) return;
+        if (CharacterTarget == null) return;
 
-        Vector3 direction = targetCharacter.transform.position - CharacterData.CharacterTransform.position;
+        Vector3 direction = CharacterTarget.transform.position - CharacterData.CharacterTransform.position;
         direction.y = 0;
         direction = direction.normalized;
 

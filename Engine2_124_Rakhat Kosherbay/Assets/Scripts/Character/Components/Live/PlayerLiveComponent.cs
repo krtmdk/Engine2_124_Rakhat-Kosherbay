@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class PlayerLiveComponent : ILiveComponent
 {
+    Character selfCharacter;
     public event Action OnDeath;
+    public event Action<Character> OnCharacterDeath;
 
     private float health = 50;
 
@@ -38,6 +40,13 @@ public class PlayerLiveComponent : ILiveComponent
 
     private void SetDeath()
     {
+        OnCharacterDeath?.Invoke(selfCharacter);
         OnDeath?.Invoke();
     }
+
+    public void Initialize(Character selfCharacter) 
+    { 
+        this.selfCharacter = selfCharacter; 
+    }
+
 }
